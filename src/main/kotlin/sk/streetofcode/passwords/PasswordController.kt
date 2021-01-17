@@ -1,5 +1,6 @@
 package sk.streetofcode.passwords
 
+import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -8,10 +9,19 @@ class PasswordController(
     var passwordService: PasswordService,
     private val passwords: MutableList<String> = mutableListOf()
 ) {
+    companion object {
+        val logger = LoggerFactory.getLogger(PasswordController::class.java)
+    }
+
     @GetMapping("")
-    fun get() = passwordService.getAll()
+    fun get(): List<PasswordModel> {
+        logger.info("Getting passwords.")
+        return passwordService.getAll()
+    }
 
     @PostMapping("")
-    fun add(@RequestBody request: AddPasswordRequest) =
-        passwordService.add(request)
+    fun add(@RequestBody request: AddPasswordRequest): PasswordModel {
+        logger.info("Adding password.")
+        return passwordService.add(request)
+    }
 }
